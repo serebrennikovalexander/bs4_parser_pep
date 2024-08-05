@@ -63,12 +63,12 @@ python3 main download
 ```
 python3 main pep
 ```
-Ещё есть опциональные аргументы:
--h, --help - Вызов справки
--c, --clear-cache - Очистка кеша
--o {pretty,file}, --output {pretty,file} - Дополнительные способы вывода данных.
-pretty - вывод таблицы в терминале
-file - сохранение в csv-файл в папку resulta
+Ещё есть опциональные аргументы:\
+**-h, --help** - Вызов справки\
+-c, --clear-cache - Очистка кеша\
+-o {pretty,file}, --output {pretty,file} - Дополнительные способы вывода данных.\
+pretty - вывод таблицы в терминале\
+file - сохранение в csv-файл в папку resulta\
 Пример использования допольнительных аргументоа
 ```
 python3 main pep --output file
