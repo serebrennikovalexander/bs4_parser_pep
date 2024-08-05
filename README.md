@@ -47,9 +47,31 @@ cd bs4_parser
 ```
 
 Запустить проект:
-
+Режим 1
 ```
-python3 main
+python3 main whats-new
+```
+Режим 2
+```
+python3 main latest-versions
+```
+Режим 3
+```
+python3 main download
+```
+Режим 4
+```
+python3 main pep
+```
+Ещё есть опциональные аргументы:
+-h, --help - Вызов справки
+-c, --clear-cache - Очистка кеша
+-o {pretty,file}, --output {pretty,file} - Дополнительные способы вывода данных.
+pretty - вывод таблицы в терминале
+file - сохранение в csv-файл в папку resulta
+Пример использования допольнительных аргументоа
+```
+python3 main pep --output file
 ```
 ### Автор
 Александр Серебренников
