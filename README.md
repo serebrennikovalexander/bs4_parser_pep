@@ -49,29 +49,29 @@ cd src
 Запустить проект:\
 Режим 1
 ```
-python3 main whats-new
+python3 main.py whats-new
 ```
 Режим 2
 ```
-python3 main latest-versions
+python3 main.py latest-versions
 ```
 Режим 3
 ```
-python3 main download
+python3 main.py download
 ```
 Режим 4
 ```
-python3 main pep
+python3 main.py pep
 ```
 Ещё есть опциональные аргументы:\
 ```-h, --help``` - Вызов справки\
 ```-c, --clear-cache``` - Очистка кеша\
 ```-o {pretty,file}, --output {pretty,file}``` - Дополнительные способы вывода данных.\
 ```pretty``` - вывод таблицы в терминале\
-```file``` - сохранение в csv-файл в папку resulta\
+```file``` - сохранение в csv-файл в папку results\
 Пример использования допольнительных аргументов:
 ```
-python3 main pep --output file
+python3 main.py pep --output file
 ```
 ### Автор
 Александр Серебренников
