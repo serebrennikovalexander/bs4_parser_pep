@@ -54,7 +54,6 @@ cd src
 
 Запустить проект:\
 Режим 1
-
 Linux
 ```
 python3 main.py whats-new
@@ -64,7 +63,6 @@ Windows
 python main.py whats-new
 ```
 Режим 2
-
 Linux
 ```
 python3 main.py latest-versions
@@ -74,7 +72,6 @@ Windows
 python main.py latest-versions
 ```
 Режим 3
-
 Linux
 ```
 python3 main.py download
@@ -84,7 +81,6 @@ Windows
 python main.py download
 ```
 Режим 4
-
 Linux
 ```
 python3 main.py pep
@@ -97,7 +93,7 @@ python main.py pep
 ```-h, --help``` - Вызов справки\
 ```-c, --clear-cache``` - Очистка кеша\
 ```-o {pretty,file}, --output {pretty,file}``` - Дополнительные способы вывода данных.\
-```pretty``` - вывод таблицы в терминале\
+```pretty``` - вывод таблицы в терминале (кроме режима 4)\
 ```file``` - сохранение в csv-файл в папку results\
 Пример использования допольнительных аргументов:
 
