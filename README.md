@@ -52,7 +52,8 @@ pip3 install -r requirements.txt
 cd src
 ```
 
-Запустить проект:\
+Запустить проект:
+
 Режим 1\
 Linux
 ```
@@ -62,6 +63,7 @@ Windows
 ```
 python main.py whats-new
 ```
+
 Режим 2\
 Linux
 ```
@@ -70,7 +72,9 @@ python3 main.py latest-versions
 Windows
 ```
 python main.py latest-versions
+
 ```
+
 Режим 3\
 Linux
 ```
@@ -80,6 +84,7 @@ Windows
 ```
 python main.py download
 ```
+
 Режим 4\
 Linux
 ```
@@ -89,6 +94,7 @@ Windows
 ```
 python main.py pep
 ```
+
 Ещё есть опциональные аргументы:\
 ```-h, --help``` - Вызов справки\
 ```-c, --clear-cache``` - Очистка кеша\
