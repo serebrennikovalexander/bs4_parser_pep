@@ -2,7 +2,7 @@ import logging
 
 from requests import RequestException
 
-from exceptions import ParserFindTagException
+from exceptions import ParserFindTagException, PageNotDownloadError
 
 
 def get_response(session, url):
@@ -23,3 +23,8 @@ def find_tag(soup, tag, attrs=None):
         logging.error(error_msg, stack_info=True)
         raise ParserFindTagException(error_msg)
     return searched_tag
+
+
+def check_response(response, url):
+    if response is None:
+        raise PageNotDownloadError(f"Страница {url} не загружена")

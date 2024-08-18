@@ -7,30 +7,22 @@ from bs4 import BeautifulSoup
 from tqdm import tqdm
 
 from configs import configure_argument_parser, configure_logging
-from constants import (
-    BASE_DIR,
-    MAIN_DOC_URL,
-    PEP_DOC_URL,
-    EXPECTED_STATUS,
-    NUMBER_OF_PEP,
-)
+from constants import BASE_DIR, MAIN_DOC_URL, PEP_DOC_URL, EXPECTED_STATUS
+from exceptions import ParserFindListWithTagException
 from outputs import control_output
-from utils import find_tag, get_response
+from utils import find_tag, get_response, check_response
 
 
 def whats_new(session):
 
     whats_new_url = urljoin(MAIN_DOC_URL, "whatsnew/")
     response = get_response(session, whats_new_url)
-    if response is None:
-        # Если основная страница не загрузится, программа закончит работу.
-        return
+    check_response(response, whats_new_url)
     soup = BeautifulSoup(response.text, features="lxml")
     main_div = find_tag(soup, "section", attrs={"id": "what-s-new-in-python"})
     div_with_ul = find_tag(main_div, "div", attrs={"class": "toctree-wrapper"})
     sections_by_python = div_with_ul.find_all(
-        "li",
-        attrs={"class": "toctree-l1"}
+        "li", attrs={"class": "toctree-l1"}
     )
     results = [("Ссылка на статью", "Заголовок", "Редактор, автор")]
 
@@ -54,9 +46,7 @@ def whats_new(session):
 
 def latest_versions(session):
     response = get_response(session, MAIN_DOC_URL)
-    # Если основная страница не загрузится, программа закончит работу.
-    if response is None:
-        return
+    check_response(response, MAIN_DOC_URL)
     soup = BeautifulSoup(response.text, features="lxml")
     sidebar = find_tag(soup, "div", {"class": "sphinxsidebarwrapper"})
     ul_tags = sidebar.find_all("ul")
@@ -65,7 +55,9 @@ def latest_versions(session):
             a_tags = ul.find_all("a")
             break
         else:
-            raise Exception("Ничего не нашлось")
+            raise ParserFindListWithTagException(
+                "Список с нужными тегами не найден"
+            )
     results = [("Ссылка на документацию", "Версия", "Статус")]
     pattern = r"Python (?P<version>\d\.\d+) \((?P<status>.*)\)"
     for a_tag in a_tags:
@@ -85,15 +77,11 @@ def latest_versions(session):
 def download(session):
     downloads_url = urljoin(MAIN_DOC_URL, "download.html")
     response = get_response(session, downloads_url)
-    # Если основная страница не загрузится, программа закончит работу.
-    if response is None:
-        return
+    check_response(response, downloads_url)
     soup = BeautifulSoup(response.text, features="lxml")
     table_tag = find_tag(soup, "table", attrs={"class": "docutils"})
     pdf_a4_tag = find_tag(
-        table_tag,
-        "a",
-        attrs={"href": re.compile(r".+pdf-a4\.zip$")}
+        table_tag, "a", attrs={"href": re.compile(r".+pdf-a4\.zip$")}
     )
     pdf_a4_link = pdf_a4_tag["href"]
     archive_url = urljoin(downloads_url, pdf_a4_link)
@@ -110,15 +98,13 @@ def download(session):
 
 def pep(session):
     response = get_response(session, PEP_DOC_URL)
-    # Если основная страница не загрузится, программа закончит работу.
-    if response is None:
-        return
+    check_response(response, PEP_DOC_URL)
     soup = BeautifulSoup(response.text, features="lxml")
     main_section = find_tag(soup, "section", attrs={"id": "numerical-index"})
     main_table = find_tag(
         main_section,
         "table",
-        attrs={"class": "pep-zero-table docutils align-default"}
+        attrs={"class": "pep-zero-table docutils align-default"},
     )
     main_table_body = find_tag(main_table, "tbody")
     list_of_pep = main_table_body.find_all(
@@ -126,6 +112,8 @@ def pep(session):
     )
 
     all_pep_numbers = 0
+    number_of_pep = {}
+    logging_info = []
 
     for pep in tqdm(list_of_pep):
         all_pep_numbers += 1
@@ -139,9 +127,7 @@ def pep(session):
             continue
         soup = BeautifulSoup(response.text, features="lxml")
         dl_tag = find_tag(
-            soup,
-            "dl",
-            attrs={"class": "rfc2822 field-list simple"}
+            soup, "dl", attrs={"class": "rfc2822 field-list simple"}
         )
         dt_tags = dl_tag.find_all("dt")
         for tag in dt_tags:
@@ -156,24 +142,35 @@ def pep(session):
         preview_status = first_column_tag.text[1:]
 
         # Сравнение статуса на странице PEP со статусом в общем списке.
-        if status_on_page not in EXPECTED_STATUS[preview_status]:
-            logging.info(
-                f"Несовпадающие статусы: {version_link}\n"
-                f"Статус в карточке: {status_on_page}\n"
-                f"Ожидаемые статусы: {EXPECTED_STATUS[preview_status]}"
+        try:
+            expected_status = EXPECTED_STATUS[preview_status]
+        except KeyError:
+            logging_info.append(
+                f"Статуса {preview_status} нет среди ключей словаря EXPECTED_STATUS"
+            )
+            continue
+
+        if status_on_page not in expected_status:
+            logging_info.extend(
+                [
+                    f"Несовпадающие статусы: {version_link}",
+                    f"Статус в карточке: {status_on_page}",
+                    f"Ожидаемые статусы: {EXPECTED_STATUS[preview_status]}",
+                ]
             )
             status_on_page = EXPECTED_STATUS[preview_status][0]
 
-        # Подсчёт количество документов с каждым статусом.
-        for key in NUMBER_OF_PEP:
-            if status_on_page in key:
-                NUMBER_OF_PEP[key] += 1
-                break
+        # Подсчёт количества документов с каждым статусом.
+        number_of_pep[status_on_page] = (
+            number_of_pep.get(status_on_page, 0) + 1
+        )
+
+    for log in logging_info:
+        logging.info(log)
 
     # Создание таблицы с результатами.
     results = [("Статус", "Количество")]
-    for key, value in NUMBER_OF_PEP.items():
-        results.append((key, value))
+    results.extend(number_of_pep.items())
 
     results.append(("Total", all_pep_numbers))
 

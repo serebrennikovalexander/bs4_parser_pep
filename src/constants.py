@@ -14,13 +14,3 @@ EXPECTED_STATUS = {
     "W": ("Withdrawn",),
     "": ("Draft", "Active"),
 }
-NUMBER_OF_PEP = {
-    ("Active", "Accepted"): 0,
-    ("Deferred",): 0,
-    ("Final",): 0,
-    ("Provisional",): 0,
-    ("Rejected",): 0,
-    ("Superseded",): 0,
-    ("Withdrawn",): 0,
-    ("Draft", "Active"): 0,
-}
