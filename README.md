@@ -22,18 +22,29 @@ cd bs4_parser
 
 Cоздать и активировать виртуальное окружение:
 
+Linux
 ```
-python3.10 -m venv venv
+python3 -m venv venv
+```
+Windows
+```
+python -m venv venv
 ```
 
 ```
-source env/bin/activate
+Linux
+source venv/bin/activate
+Windows
+source venv/Scripts/activate
 ```
 
 Установить зависимости из файла requirements.txt:
 
 ```
+Linix
 python3 -m pip install --upgrade pip
+Windows
+python.exe -m pip install --upgrade pip
 ```
 
 ```
@@ -49,19 +60,31 @@ cd src
 Запустить проект:\
 Режим 1
 ```
+Linux
 python3 main.py whats-new
+Windows
+python main.py whats-new
 ```
 Режим 2
 ```
+Linux
 python3 main.py latest-versions
+Windows
+python main.py latest-versions
 ```
 Режим 3
 ```
+Linux
 python3 main.py download
+Windows
+python main.py download
 ```
 Режим 4
 ```
+Linux
 python3 main.py pep
+Windows
+python main.py pep
 ```
 Ещё есть опциональные аргументы:\
 ```-h, --help``` - Вызов справки\
@@ -71,7 +94,10 @@ python3 main.py pep
 ```file``` - сохранение в csv-файл в папку results\
 Пример использования допольнительных аргументов:
 ```
+Linux
 python3 main.py pep --output file
+Windows
+python main.py pep --output file
 ```
 ### Автор
 Александр Серебренников
