@@ -53,7 +53,7 @@ cd src
 ```
 
 Запустить проект:\
-Режим 1
+Режим 1\
 Linux
 ```
 python3 main.py whats-new
@@ -62,7 +62,7 @@ Windows
 ```
 python main.py whats-new
 ```
-Режим 2
+Режим 2\
 Linux
 ```
 python3 main.py latest-versions
@@ -71,7 +71,7 @@ Windows
 ```
 python main.py latest-versions
 ```
-Режим 3
+Режим 3\
 Linux
 ```
 python3 main.py download
@@ -80,7 +80,7 @@ Windows
 ```
 python main.py download
 ```
-Режим 4
+Режим 4\
 Linux
 ```
 python3 main.py pep
