@@ -25,29 +25,24 @@ Cоздать и активировать виртуальное окружен�
 Linux
 ```
 python3 -m venv venv
+source venv/bin/activate
 ```
 Windows
 ```
 python -m venv venv
-```
-
-```
-Linux
-source venv/bin/activate
-Windows
 source venv/Scripts/activate
 ```
 
 Установить зависимости из файла requirements.txt:
 
-```
 Linix
+```
 python3 -m pip install --upgrade pip
+pip3 install -r requirements.txt
+```
 Windows
+```
 python.exe -m pip install --upgrade pip
-```
-
-```
 pip3 install -r requirements.txt
 ```
 
@@ -59,31 +54,43 @@ cd src
 
 Запустить проект:\
 Режим 1
-```
+
 Linux
+```
 python3 main.py whats-new
+```
 Windows
+```
 python main.py whats-new
 ```
 Режим 2
-```
+
 Linux
+```
 python3 main.py latest-versions
+```
 Windows
+```
 python main.py latest-versions
 ```
 Режим 3
-```
+
 Linux
+```
 python3 main.py download
+```
 Windows
+```
 python main.py download
 ```
 Режим 4
-```
+
 Linux
+```
 python3 main.py pep
+```
 Windows
+```
 python main.py pep
 ```
 Ещё есть опциональные аргументы:\
@@ -93,10 +100,13 @@ python main.py pep
 ```pretty``` - вывод таблицы в терминале\
 ```file``` - сохранение в csv-файл в папку results\
 Пример использования допольнительных аргументов:
-```
+
 Linux
+```
 python3 main.py pep --output file
+```
 Windows
+```
 python main.py pep --output file
 ```
 ### Автор
