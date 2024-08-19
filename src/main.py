@@ -7,10 +7,10 @@ from bs4 import BeautifulSoup
 from tqdm import tqdm
 
 from configs import configure_argument_parser, configure_logging
-from constants import BASE_DIR, MAIN_DOC_URL, PEP_DOC_URL, EXPECTED_STATUS
+from constants import BASE_DIR, EXPECTED_STATUS, MAIN_DOC_URL, PEP_DOC_URL
 from exceptions import ParserFindListWithTagException
 from outputs import control_output
-from utils import find_tag, get_response, check_response
+from utils import check_response, find_tag, get_response
 
 
 def whats_new(session):
@@ -22,7 +22,8 @@ def whats_new(session):
     main_div = find_tag(soup, "section", attrs={"id": "what-s-new-in-python"})
     div_with_ul = find_tag(main_div, "div", attrs={"class": "toctree-wrapper"})
     sections_by_python = div_with_ul.find_all(
-        "li", attrs={"class": "toctree-l1"}
+        "li",
+        attrs={"class": "toctree-l1"}
     )
     results = [("Ссылка на статью", "Заголовок", "Редактор, автор")]
 
@@ -81,7 +82,9 @@ def download(session):
     soup = BeautifulSoup(response.text, features="lxml")
     table_tag = find_tag(soup, "table", attrs={"class": "docutils"})
     pdf_a4_tag = find_tag(
-        table_tag, "a", attrs={"href": re.compile(r".+pdf-a4\.zip$")}
+        table_tag,
+        "a",
+        attrs={"href": re.compile(r".+pdf-a4\.zip$")}
     )
     pdf_a4_link = pdf_a4_tag["href"]
     archive_url = urljoin(downloads_url, pdf_a4_link)
@@ -127,7 +130,9 @@ def pep(session):
             continue
         soup = BeautifulSoup(response.text, features="lxml")
         dl_tag = find_tag(
-            soup, "dl", attrs={"class": "rfc2822 field-list simple"}
+            soup,
+            "dl",
+            attrs={"class": "rfc2822 field-list simple"}
         )
         dt_tags = dl_tag.find_all("dt")
         for tag in dt_tags:
@@ -146,7 +151,7 @@ def pep(session):
             expected_status = EXPECTED_STATUS[preview_status]
         except KeyError:
             logging_info.append(
-                f"Статуса {preview_status} нет среди ключей словаря EXPECTED_STATUS"
+                f"Статуса {preview_status} нет среди ключей словаря"
             )
             continue
 
@@ -161,9 +166,8 @@ def pep(session):
             status_on_page = EXPECTED_STATUS[preview_status][0]
 
         # Подсчёт количества документов с каждым статусом.
-        number_of_pep[status_on_page] = (
-            number_of_pep.get(status_on_page, 0) + 1
-        )
+        number_of_pep[status_on_page] = (number_of_pep.get(status_on_page, 0)
+                                         + 1)
 
     for log in logging_info:
         logging.info(log)
