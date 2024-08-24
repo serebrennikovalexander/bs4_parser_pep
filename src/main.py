@@ -10,14 +10,12 @@ from configs import configure_argument_parser, configure_logging
 from constants import BASE_DIR, EXPECTED_STATUS, MAIN_DOC_URL, PEP_DOC_URL
 from exceptions import ParserFindListWithTagException
 from outputs import control_output
-from utils import check_response, find_tag, get_response
+from utils import find_tag, get_response
 
 
 def whats_new(session):
-
     whats_new_url = urljoin(MAIN_DOC_URL, "whatsnew/")
     response = get_response(session, whats_new_url)
-    check_response(response, whats_new_url)
     soup = BeautifulSoup(response.text, features="lxml")
     main_div = find_tag(soup, "section", attrs={"id": "what-s-new-in-python"})
     div_with_ul = find_tag(main_div, "div", attrs={"class": "toctree-wrapper"})
@@ -47,7 +45,6 @@ def whats_new(session):
 
 def latest_versions(session):
     response = get_response(session, MAIN_DOC_URL)
-    check_response(response, MAIN_DOC_URL)
     soup = BeautifulSoup(response.text, features="lxml")
     sidebar = find_tag(soup, "div", {"class": "sphinxsidebarwrapper"})
     ul_tags = sidebar.find_all("ul")
@@ -78,7 +75,6 @@ def latest_versions(session):
 def download(session):
     downloads_url = urljoin(MAIN_DOC_URL, "download.html")
     response = get_response(session, downloads_url)
-    check_response(response, downloads_url)
     soup = BeautifulSoup(response.text, features="lxml")
     table_tag = find_tag(soup, "table", attrs={"class": "docutils"})
     pdf_a4_tag = find_tag(
@@ -101,7 +97,6 @@ def download(session):
 
 def pep(session):
     response = get_response(session, PEP_DOC_URL)
-    check_response(response, PEP_DOC_URL)
     soup = BeautifulSoup(response.text, features="lxml")
     main_section = find_tag(soup, "section", attrs={"id": "numerical-index"})
     main_table = find_tag(
