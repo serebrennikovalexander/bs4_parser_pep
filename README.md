@@ -17,7 +17,7 @@ git clone git@github.com:serebrennikovalexander/bs4_parser_pep.git
 ```
 
 ```
-cd bs4_parser
+cd bs4_parser_pep
 ```
 
 Cоздать и активировать виртуальное окружение:
